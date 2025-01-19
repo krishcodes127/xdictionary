@@ -1,61 +1,38 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./App.css";
 
+const dictionary = [
+  {
+    word: "React",
+    meaning: "A JavaScript library for building user interfaces.",
+  },
+
+  { word: "Component", meaning: "A reusable building block in React." },
+
+  { word: "State", meaning: "An object that stores data for a component." },
+];
+
 function App() {
-  
-  const [dictionary] = useState([
-    { word: "React", meaning: "A JavaScript library for building user interfaces." },
-    { word: "Component", meaning: "A reusable building block in React." },
-    { word: "State", meaning: "An object that stores data for a component." },
-  ]);
-  
-  const [searchTerm, setSearchTerm] = useState("");  
-  const [result, setResult] = useState("");  
+  const [value, setValue] = useState('');
+  const [matched, setMatched] = useState('');
 
-  // Handle search button click
-  // const handleSearch = () => {
-  //   const foundWord = dictionary.find(
-  //     (entry) => entry.word.toLowerCase() === searchTerm.toLowerCase()
-  //   );
-    
-  //   if (foundWord) {
-  //     setResult(foundWord.meaning);  
-  //   } else {
-  //     setResult("Word not found in the dictionary.");  
-  //   }
-  // };
-  const handleSearch = () => {
-    const trimmedSearchTerm = searchTerm.trim();
-     if (!trimmedSearchTerm) {
-          setResult("Please enter a word to search.");
-          return;
-        }
-    const foundWord = dictionary.find(
-          (entry) => entry.word.toLowerCase() === trimmedSearchTerm.toLowerCase()
-        );
-    if (foundWord) {
-          setResult(foundWord.meaning);
-        } else {
-          setResult("Word not found in the dictionary.");
-        }
-      };
-
+  const findingMeaning = (lowerWord)=>{
+    const found = dictionary.find((item)=> item.word.toLowerCase() === lowerWord)
+    setMatched(found ? found.meaning : "Word not found in the dictionary.");
+  }
+  const handleSubmit = (e)=>{
+    e.preventDefault();
+    findingMeaning(value.toLowerCase());
+  }
   return (
-    <div className="App">
+    <div>
       <h1>Dictionary App</h1>
-      <div>
-        <input
-          type="text"
-          placeholder="Search for a word..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}  
-        />
-        <button onClick={handleSearch}>Search</button>
-        <p>Definition:</p>
-      </div>
-      <div>
-        <p>{result || " "}</p>
-      </div>
+      <form onSubmit={handleSubmit}>
+        <input type="text" placeholder="Search for a word..." value={value} onChange={(e)=>setValue(e.target.value)}/>
+        <button type="submit">Search</button>
+      </form>
+      <h5>Definition:</h5>
+      {matched && <p>{matched}</p>}
     </div>
   );
 }

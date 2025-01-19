@@ -9,21 +9,36 @@ function App() {
     { word: "State", meaning: "An object that stores data for a component." },
   ]);
   
-  const [searchTerm, setSearchTerm] = useState("");  // To store the search input
-  const [result, setResult] = useState("");  // To store the meaning or error message
+  const [searchTerm, setSearchTerm] = useState("");  
+  const [result, setResult] = useState("");  
 
   // Handle search button click
-  const handleSearch = () => {
-    const foundWord = dictionary.find(
-      (entry) => entry.word.toLowerCase() === searchTerm.toLowerCase()
-    );
+  // const handleSearch = () => {
+  //   const foundWord = dictionary.find(
+  //     (entry) => entry.word.toLowerCase() === searchTerm.toLowerCase()
+  //   );
     
+  //   if (foundWord) {
+  //     setResult(foundWord.meaning);  
+  //   } else {
+  //     setResult("Word not found in the dictionary.");  
+  //   }
+  // };
+  const handleSearch = () => {
+    const trimmedSearchTerm = searchTerm.trim();
+     if (!trimmedSearchTerm) {
+          setResult("Please enter a word to search.");
+          return;
+        }
+    const foundWord = dictionary.find(
+          (entry) => entry.word.toLowerCase() === trimmedSearchTerm.toLowerCase()
+        );
     if (foundWord) {
-      setResult(foundWord.meaning);  
-    } else {
-      setResult("Word not found in the dictionary.");  
-    }
-  };
+          setResult(foundWord.meaning);
+        } else {
+          setResult("Word not found in the dictionary.");
+        }
+      };
 
   return (
     <div className="App">
@@ -39,7 +54,7 @@ function App() {
         <p>Definition:</p>
       </div>
       <div>
-        <p>{result}</p>
+        <p>{result || " "}</p>
       </div>
     </div>
   );
